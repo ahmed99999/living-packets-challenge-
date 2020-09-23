@@ -21,9 +21,9 @@ const Slide: React.FC<SlideProps> = ({ slide }) => {
     //     }
     // });
 
-    // const SlideImageClass = (fade) ? classes.slide__img : classes.slide__img__hide;
+    // const slideImageClass = (fade) ? classes.slide__img : classes.slide__img__hide;
     return (
-        <div className={classes.slide__img}>
+        <div className={classes.slide}>
             <img className={classes.slide__img} src={slide?.url} alt="" />
         </div>
     );
