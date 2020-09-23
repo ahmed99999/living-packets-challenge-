@@ -1,10 +1,9 @@
 import React from 'react';
+import Slides from './components/Slides';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      text
-    </div>
+    <Slides />
   );
 }
 
