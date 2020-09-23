@@ -3,6 +3,7 @@ import classes from './index.module.scss';
 import SlideClass from '../../services/Slides_Service';
 import { SlideInterface } from '../Slide';
 import Slide from '../Slide';
+import NavigationSlies from '../NavigationSlides';
 
 export interface SlidesProps {
 
@@ -13,10 +14,13 @@ const Slides: React.FC<SlidesProps> = () => {
     const [slides, setSlides] = useState<SlideInterface[]>([]);
     const [currentSlide, setCurrentSlide] = useState<SlideInterface>({ id: 0, url: "" });
     const [loading, setLoading] = useState(false);
+    const [Navslides, setNavSlides] = useState<SlideInterface[]>([]);
+
 
     const getSlides = async () => {
         const slides = await SlideClass.getSlides();
         setSlides(slides);
+        setNavSlides(slides.slice(0, 5));
         if (slides.length > 0) setCurrentSlide(slides[0]);
     }
 
@@ -38,12 +42,17 @@ const Slides: React.FC<SlidesProps> = () => {
     return (
         <>
             {loading && <div></div>}
-            {!loading && <div className={`row ${classes.slides}`}>
-                <i className="fa fa-chevron-left fa-2x col-1" onClick={() => setCurrentSlide(getCurrentSlide(false))} aria-hidden="true"></i>
-                <div className="col-10">
-                    <Slide slide={currentSlide} />
+            {!loading && <div className={classes.slides}>
+                <div className="row">
+                    <i className="fa fa-chevron-left fa-2x col-1" onClick={() => setCurrentSlide(getCurrentSlide(false))} aria-hidden="true"></i>
+                    <div className="col-10">
+                        <Slide slide={currentSlide} />
+                    </div>
+                    <i className="fa fa-chevron-right fa-2x col-1" onClick={() => setCurrentSlide(getCurrentSlide(true))} aria-hidden="true"></i>
                 </div>
-                <i className="fa fa-chevron-right fa-2x col-1" onClick={() => setCurrentSlide(getCurrentSlide(true))} aria-hidden="true"></i>
+                <div className={`row ${classes.navSlides}`}>
+                    <NavigationSlies slides={Navslides} />
+                </div>
             </div>}
         </>
     );
