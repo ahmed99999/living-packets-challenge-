@@ -1,4 +1,5 @@
 import HttpRequest from '../Http_Service';
+import slides from './slides.json';
 
 class Slide {
     constructor(
@@ -7,9 +8,12 @@ class Slide {
 
     public static getSlides = async () => {
         try {
-            const request = new HttpRequest();
-            const { data: slides } = await request.get('/slides');
             return slides;
+            // here I would make the HttpRequest as follow:
+
+            // 1-  const request = new HttpRequest();
+            // 2- const { data: slides } = await request.get('/slides');
+            // 3- return slides;
         } catch (error) {
             console.error(error);
             return [];
