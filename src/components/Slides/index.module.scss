@@ -1,4 +1,12 @@
+@import '../../variables.module.scss';
 
 .slides{
-    margin: 5%;
+    margin: auto;
+    text-align: center;
+}
+
+.slides i{
+    margin-top: 20%;
+    color: $fontColor;
+    cursor: pointer;
 }

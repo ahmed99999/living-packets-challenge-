@@ -1,35 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import classes from './index.module.scss';
 import SlideClass from '../../services/Slides_Service';
+import { SlideInterface } from '../Slide';
 import Slide from '../Slide';
 
 export interface SlidesProps {
 
 }
 
-export interface SlideInterface {
-    id: number;
-    url: string;
-}
-
 const Slides: React.FC<SlidesProps> = () => {
 
     const [slides, setSlides] = useState<SlideInterface[]>([]);
-    const [currentSlide, setCurrentSlide] = useState<SlideInterface>();
+    const [currentSlide, setCurrentSlide] = useState<SlideInterface>({ id: 0, url: "" });
+    const [loading, setLoading] = useState(false);
+
+    const getSlides = async () => {
+        const slides = await SlideClass.getSlides();
+        setSlides(slides);
+        if (slides.length > 0) setCurrentSlide(slides[0]);
+    }
 
     useEffect(() => {
-        const getSlides = async () => {
-            const slides = await SlideClass.getSlides();
-            setSlides(slides);
-            if (slides.length > 0) setCurrentSlide(slides[0]);
-        }
         getSlides();
     }, []);
 
+    const getCurrentSlide = (bool: boolean) => {
+        const currentSlideIndex = slides.findIndex(slide => slide.id === currentSlide.id);
+        if (bool) {
+            if (currentSlideIndex + 1 >= slides.length) return slides[currentSlideIndex];
+            else return slides[currentSlideIndex + 1];
+        } else {
+            if (currentSlideIndex - 1 < 0) return slides[currentSlideIndex];
+            else return slides[currentSlideIndex - 1];
+        }
+    };
+
     return (
-        <div className={classes.slides}>
-            <Slide slide={currentSlide} />
-        </div>
+        <>
+            {loading && <div></div>}
+            {!loading && <div className={`row ${classes.slides}`}>
+                <i className="fa fa-chevron-left fa-2x col-1" onClick={() => setCurrentSlide(getCurrentSlide(false))} aria-hidden="true"></i>
+                <div className="col-10">
+                    <Slide slide={currentSlide} />
+                </div>
+                <i className="fa fa-chevron-right fa-2x col-1" onClick={() => setCurrentSlide(getCurrentSlide(true))} aria-hidden="true"></i>
+            </div>}
+        </>
     );
 }
 

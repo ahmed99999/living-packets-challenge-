@@ -1,0 +1,12 @@
+@import '../../variables.module.scss';
+
+.slide{
+    margin: 5% 10%;
+}
+@import '../../variables.module.scss';
+
+.slide__img{
+    width: 100%;
+    border: 1px solid $fontColor;
+    border-radius: 3px;
+}

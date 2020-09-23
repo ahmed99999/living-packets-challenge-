@@ -11,7 +11,7 @@ class Slide {
             return slides;
             // here I would make the HttpRequest as follow:
 
-            // 1-  const request = new HttpRequest();
+            // 1- const request = new HttpRequest();
             // 2- const { data: slides } = await request.get('/slides');
             // 3- return slides;
         } catch (error) {
