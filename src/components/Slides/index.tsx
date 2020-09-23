@@ -3,7 +3,8 @@ import classes from './index.module.scss';
 import SlideClass from '../../services/Slides_Service';
 import { SlideInterface } from '../Slide';
 import Slide from '../Slide';
-import NavigationSlies from '../NavigationSlides';
+import NavigationSlides from '../NavigationSlides';
+import console from 'console';
 
 export interface SlidesProps {
 
@@ -17,42 +18,42 @@ const Slides: React.FC<SlidesProps> = () => {
     const [Navslides, setNavSlides] = useState<SlideInterface[]>([]);
 
 
-    const getSlides = async () => {
+    const initializeComponent = async () => {
         const slides = await SlideClass.getSlides();
         setSlides(slides);
         setNavSlides(slides.slice(0, 5));
         if (slides.length > 0) setCurrentSlide(slides[0]);
+        setLoading(true);
     }
 
     useEffect(() => {
-        getSlides();
+        initializeComponent();
     }, []);
 
-    const getCurrentSlide = (bool: boolean) => {
+    const getCurrentSlide = (forward: boolean) => {
         const currentSlideIndex = slides.findIndex(slide => slide.id === currentSlide.id);
-        if (bool) {
-            if (currentSlideIndex + 1 >= slides.length) return slides[currentSlideIndex];
-            else return slides[currentSlideIndex + 1];
+
+        if (forward) {
+            if (!(currentSlideIndex + 1 >= slides.length)) setCurrentSlide(slides[currentSlideIndex + 1]);
         } else {
-            if (currentSlideIndex - 1 < 0) return slides[currentSlideIndex];
-            else return slides[currentSlideIndex - 1];
+            if (!(currentSlideIndex - 1 < 0)) setCurrentSlide(slides[currentSlideIndex - 1]);
         }
+
+        // setNavSlides(slides.slice(0, 5));    
     };
 
     return (
         <>
-            {loading && <div></div>}
-            {!loading && <div className={classes.slides}>
+            {!loading && <div></div>}
+            {loading && <div className={classes.slides}>
                 <div className="row">
-                    <i className="fa fa-chevron-left fa-2x col-1" onClick={() => setCurrentSlide(getCurrentSlide(false))} aria-hidden="true"></i>
+                    <i className="fa fa-chevron-left fa-2x col-1" onClick={() => getCurrentSlide(false)} aria-hidden="true"></i>
                     <div className="col-10">
                         <Slide slide={currentSlide} />
                     </div>
-                    <i className="fa fa-chevron-right fa-2x col-1" onClick={() => setCurrentSlide(getCurrentSlide(true))} aria-hidden="true"></i>
+                    <i className="fa fa-chevron-right fa-2x col-1" onClick={() => getCurrentSlide(true)} aria-hidden="true"></i>
                 </div>
-                <div className={`row ${classes.navSlides}`}>
-                    <NavigationSlies slides={Navslides} />
-                </div>
+                <NavigationSlides slides={Navslides} currentSlide={currentSlide} />
             </div>}
         </>
     );

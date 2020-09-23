@@ -1,20 +1,21 @@
 import React from 'react';
-import Slide from '../Slide';
+import NavigationSlide from '../NavigationSlide';
 import { SlideInterface } from '../Slide';
 import classes from './index.module.scss';
 
-export interface NavigationSliesProps {
+export interface NavigationSlidesProps {
     slides: SlideInterface[];
+    currentSlide: SlideInterface
 }
 
-const NavigationSlies: React.FC<NavigationSliesProps> = ({ slides }) => {
+const NavigationSlides: React.FC<NavigationSlidesProps> = ({ slides, currentSlide }) => {
     return (
         <div className={classes.navigationSlides}>
             {slides.map(slide => (
-                <Slide key={slide.id} slide={slide} />
+                <NavigationSlide key={slide.id} slide={slide} currentSlide={currentSlide} />
             ))}
         </div>
     );
 }
 
-export default NavigationSlies;
+export default NavigationSlides;
