@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import classes from './index.module.scss';
 
 export interface SlideInterface {
@@ -7,26 +8,39 @@ export interface SlideInterface {
 }
 
 export interface SlideProps {
-    slide: SlideInterface | undefined
+    slide: SlideInterface
 }
 
 const Slide: React.FC<SlideProps> = ({ slide }) => {
 
-    // const [fade, setFade] = useState(false);
+    const [toggel, setToggel] = useState(true);
+    const nodeRef = useRef(null);
 
-    // useEffect(() => {
-    //     return () => {
-    //         setFade(true);
-    //         // console.log(slide?.id);
-    //     }
-    // });
+    useEffect(() => {
+        setToggel(!toggel);
+        return () => setToggel(!toggel);
+    }, [slide])
 
-    // const slideImageClass = (fade) ? classes.slide__img : classes.slide__img__hide;
     return (
-        <div className={classes.slide}>
-            <img className={classes.slide__img} src={slide?.url} alt="" />
-        </div>
+        <CSSTransition
+            nodeRef={nodeRef}
+            in={toggel}
+            timeout={1000}
+            classNames={{
+                enterActive: `${classes["slide-enter-active"]} animate__animated animate__backInLeft`,
+                exitActive: classes["slide-exit-active"],
+                enter: `${classes["slide-enter"]} animate__animated animate__backInLeft`,
+                exit: classes["slide-exit"]
+            }}
+        >
+            <div ref={nodeRef}>
+                <div className={`${classes.slide}`}>
+                    <img className={classes.slide__img} src={slide?.url} alt="" />
+                </div>
+            </div>
+        </CSSTransition>
     );
 }
+
 
 export default Slide;

@@ -4,13 +4,14 @@ import SlideClass from '../../services/Slides_Service';
 import { SlideInterface } from '../Slide';
 import Slide from '../Slide';
 import NavigationSlides from '../NavigationSlides';
-import console from 'console';
 
 export interface SlidesProps {
 
 }
 
 const Slides: React.FC<SlidesProps> = () => {
+
+    const NUMBER_OF_NAVSLIDES = 5;
 
     const [slides, setSlides] = useState<SlideInterface[]>([]);
     const [currentSlide, setCurrentSlide] = useState<SlideInterface>({ id: 0, url: "" });
@@ -31,15 +32,16 @@ const Slides: React.FC<SlidesProps> = () => {
     }, []);
 
     const getCurrentSlide = (forward: boolean) => {
-        const currentSlideIndex = slides.findIndex(slide => slide.id === currentSlide.id);
+        const proviousSlideIndex = slides.findIndex(slide => slide.id === currentSlide.id);
+        const currentSlideIndex = (forward) ? proviousSlideIndex + 1 : proviousSlideIndex - 1;
+        const index = Math.floor(currentSlideIndex / NUMBER_OF_NAVSLIDES);
+        const lastNavSlideIndex = index * NUMBER_OF_NAVSLIDES + NUMBER_OF_NAVSLIDES;
+        const firstNavSlideIndex = (index * NUMBER_OF_NAVSLIDES);
 
-        if (forward) {
-            if (!(currentSlideIndex + 1 >= slides.length)) setCurrentSlide(slides[currentSlideIndex + 1]);
-        } else {
-            if (!(currentSlideIndex - 1 < 0)) setCurrentSlide(slides[currentSlideIndex - 1]);
+        if (currentSlideIndex < slides.length && currentSlideIndex >= 0) {
+            setCurrentSlide(slides[currentSlideIndex]);
+            setNavSlides(slides.slice(firstNavSlideIndex, lastNavSlideIndex));
         }
-
-        // setNavSlides(slides.slice(0, 5));    
     };
 
     return (
